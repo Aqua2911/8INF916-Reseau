@@ -6,10 +6,19 @@
 
 #include <iostream>
 #include "Socket.h"
-#include "Socket_common.cpp"
+#ifdef _WIN32
+    #include "Socket_windows.h"
+#else
+    #include "Socket_posix.h"
+#endif
 
 int main() {
-    Socket* clientSocket = SocketCommon::createSocket();
+#ifdef WIN32
+    Socket* clientSocket = new SocketWindows();
+#else
+    Socket* serverSocket = new SocketPosix();
+#endif
+
     if (!clientSocket->openSocket()) {
         std::cerr << "Erreur lors de l'ouverture du socket." << std::endl;
         return 1;
@@ -19,9 +28,9 @@ int main() {
     std::cout << "Entrez un message: ";
     std::getline(std::cin, message);
 
-    clientSocket->sendTo("127.0.0.1", message);
-    std::string response = clientSocket->receiveFrom();
-    std::cout << "Réponse du serveur: " << response << std::endl;
+    clientSocket->sendTo("127.0.0.1", message, 5555);
+    std::string response = std::get<1>(clientSocket->receiveFrom());
+    std::cout << "Reponse du serveur: " << response << std::endl;
 
     clientSocket->closeSocket();
     return 0;

@@ -1,32 +1,9 @@
 ﻿//
-// Created by grave on 2025-01-25.
+// Created by grave on 2025-01-26.
 //
 
-#include "Socket.h"
-#ifdef _WIN32
-    #include "Socket_windows.cpp"
-#else
-    #include "Socket_posix.cpp"
-#endif
-
-#ifdef _WIN32
-class SocketCommon : public Socket {
-
-    public:
-      static Socket* createSocket() {
-
-        return new SocketWindows();
-    }
-};
-
-#else
+#include <Socket.h>
 
 class SocketCommon : public Socket {
 
-  public:
-    static Socket* createSocket() {
-
-        return new SocketPosix();
-    }
 };
-#endif
