@@ -23,29 +23,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up CMake
-      - name: Set up CMake
-        uses: jwlawson/actions-setup-cmake@v1
-        with:
-          cmake-version: "3.20"  # Minimum version you need
+
+      - name: Create Build Environment
+        # Some projects don't allow in-source building, so create a separate build directory
+        # We'll use this as our working directory for all subsequent commands
+        run: cmake -E make_directory ${{github.workspace}}/build
+
+
+      - name: Configure CMake
+        shell: bash
+        working-directory: ${{github.workspace}}/build
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
+
 
       # Step 3: Install dependencies (Linux-only)
       - name: Install dependencies
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y build-essential
 
-      # Step 3.5 : Install dependencies (Windows)
-      - name: Setup Build Tools (Windows only)
-        if: runner.os == 'Windows'
-        run: |
-          choco install visualstudio2022buildtools --install-args "--add Microsoft.VisualStudio.Workload.VCTools --quiet --norestart"
-          choco install visualstudio2022-workload-vctools --norestart
 
-      # Step 4: Build the project
-      - name: Configure and Build
-        run: |
-          cmake -S . -B build
-          cmake --build build
+      - name: Build
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: cmake --build . --config ${{env.BUILD_TYPE}}
+
 
       # Step 5: Run Tests (if any)
       - name: Run Tests
