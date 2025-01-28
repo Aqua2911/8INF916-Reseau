@@ -41,7 +41,7 @@ jobs:
 
       - name: Add MinGW to PATH
         if: runner.os == 'Windows'
-        run: echo "::add-path::C:\\mingw\\bin"
+        run: echo "C:\\mingw\\bin" >> $GITHUB_PATH
 
       - name: Configure CMake (window>
         if: runner.os == 'Windows'
