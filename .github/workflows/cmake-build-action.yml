@@ -1,5 +1,6 @@
-name: Build
+name: Build and Test
 
+# Run this workflow on every push or pull request to the main branch
 on:
   push:
     branches:
@@ -10,19 +11,37 @@ on:
 
 jobs:
   build:
+    name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
+      # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Step 2: Set up CMake
       - name: Set up CMake
-        uses: cmake/setup-cmake@v2
+        uses: jwlawson/actions-setup-cmake@v1
+        with:
+          cmake-version: "3.20"  # Minimum version you need
 
-      - name: Build
+      # Step 3: Install dependencies (Linux-only)
+      - name: Install dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y build-essential
+
+      # Step 4: Build the project
+      - name: Configure and Build
         run: |
-          cmake -B build
+          cmake -S . -B build
           cmake --build build
+
+      # Step 5: Run Tests (if any)
+      - name: Run Tests
+        run: |
+          cd build
+          ctest --output-on-failure
