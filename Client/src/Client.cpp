@@ -16,7 +16,7 @@ int main() {
 #ifdef WIN32
     Socket* clientSocket = new SocketWindows();
 #else
-    Socket* serverSocket = new SocketPosix();
+    Socket* clientSocket = new SocketPosix();
 #endif
 
     if (!clientSocket->openSocket()) {

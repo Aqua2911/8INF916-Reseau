@@ -7,3 +7,13 @@
 class SocketCommon : public Socket {
 
 };
+
+/*
+#ifdef _WIN32
+#include "Socket_windows.h"
+using SocketPlatform = SocketWindows;
+#else
+#include "Socket_posix.h"
+using SocketPlatform = SocketPosix;
+#endif
+*/

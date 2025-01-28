@@ -32,16 +32,16 @@ bool SocketWindows::sendTo(const std::string& address, const std::string& messag
     return sendResult != SOCKET_ERROR;
 }
 
-std::tuple<u_short, std::string> SocketWindows::receiveFrom() {
+std::tuple<unsigned short, std::string> SocketWindows::receiveFrom() {
     sockaddr_in sourceAddr= {};// Get source port
     int addrLen = sizeof(sourceAddr);
     char buffer[1024];
     int recvResult = recvfrom(sock, buffer, sizeof(buffer), 0, reinterpret_cast<sockaddr *>(&sourceAddr), &addrLen);
     if (recvResult > 0) {
-        std::tuple<u_short, std::string> values(ntohs(sourceAddr.sin_port), std::string(buffer, recvResult));
+        std::tuple<unsigned short, std::string> values(ntohs(sourceAddr.sin_port), std::string(buffer, recvResult));
         return values;
     }
-    std::tuple<u_short, std::string> values(0, "");
+    std::tuple<unsigned short, std::string> values(0, "");
     return values;
 }
 

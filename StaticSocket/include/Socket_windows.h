@@ -27,7 +27,7 @@ public:
 
     bool sendTo(const std::string& address, const std::string& message, int port) override;
 
-    std::tuple<u_short, std::string> receiveFrom() override;
+    std::tuple<unsigned short, std::string> receiveFrom() override;
 
     void closeSocket() override;
 };

@@ -26,9 +26,9 @@ int main() {
     serverSocket->bindSocket(5555);
 
     while (true) {
-        std::tuple<u_short, std::string> data = serverSocket->receiveFrom();
+        std::tuple<unsigned short, std::string> data = serverSocket->receiveFrom();
         std::string message = std::get<1>(data);
-        u_short port = std::get<0>(data);
+        unsigned short port = std::get<0>(data);
         if (!message.empty()) {
             std::cout << "Message received: " << message << std::endl;
             bool success = serverSocket->sendTo("127.0.0.1", message, port);  // Send back to client

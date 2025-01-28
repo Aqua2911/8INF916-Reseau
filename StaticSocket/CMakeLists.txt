@@ -5,6 +5,7 @@ add_library(StaticSocket STATIC
         src/Socket_posix.cpp
         src/Socket_windows.cpp
         src/Socket_common.cpp
+        include/Socket_posix.h
 )
 
 if(WIN32)

@@ -5,7 +5,7 @@
 #ifndef SOCKET_H
 #define SOCKET_H
 #include <string>
-#include <_bsd_types.h>
+#include <tuple>
 
 
 class Socket {
@@ -17,7 +17,7 @@ class Socket {
     virtual bool bindSocket(int port) = 0;
 
     virtual bool sendTo(const std::string& address, const std::string& message, int port) = 0;
-    virtual std::tuple<u_short, std::string> receiveFrom() = 0;
+    virtual std::tuple<unsigned short, std::string> receiveFrom() = 0;
     virtual void closeSocket() = 0;
 
 };
